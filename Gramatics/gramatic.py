@@ -4,13 +4,12 @@ MINIMUM_STRING_LENGHT = 1
 
 
 class Production:
-    def __init__(self, origin, entry, destinations) -> None:
+    def __init__(self, origin, destinations) -> None:
         self.origin = origin
-        self.entry = entry
         self.destinations = destinations
 
     def __str__(self) -> str:
-        return f"{self.origin} &gt; {self.entry}  {self.destinations}"
+        return f"{self.origin} &gt; {self.destinations}"
 
 
 class Gramatic:
@@ -87,7 +86,7 @@ class Gramatic:
         new_productions = filter(lambda x: not x == "", new_productions)
         new_productions_list = []
 
-        def get_terminals(string: str) -> tuple[list[str], list[str]]:
+        def validate_destinations(string: str) -> list[str]:
             production = string.split(" ")
 
             no_terminal = []
@@ -105,7 +104,7 @@ class Gramatic:
             if len(no_terminal) == 0 and len(terminal) == 0:
                 raise Exception("The characters dont match terminal and no terminal")
 
-            return (terminal, no_terminal)
+            return production
 
         try:
             for production in new_productions:
@@ -120,11 +119,9 @@ class Gramatic:
                     raise Exception("The syntax is not correct")
 
                 # '0'     'B'
-                terminal, not_terminal = get_terminals(splited_trans[1])
+                destinations = validate_destinations(splited_trans[1])
 
-                new_productions_list.append(
-                    Production(splited_trans[0], terminal, not_terminal)
-                )
+                new_productions_list.append(Production(splited_trans[0], destinations))
 
         except:
             raise ProductionsSyntaxException(
@@ -136,7 +133,7 @@ class Gramatic:
     def is_free_of_context(self) -> bool:
         regular_gramatic = True
         for production in self._productions:
-            if len(production.entry) > 1:
+            if len(production.destinations) > 2:
                 regular_gramatic = False
 
         return not regular_gramatic

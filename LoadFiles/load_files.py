@@ -136,6 +136,7 @@ class Controller:
 
         self._app.gramatics_objects = self._app.gramatics_objects + new_gramatics_list
         self._view.label_error.set("Archivo cargado con éxito")
+        self.return_button()
 
     def _load_automaton(self):
         if self.file is None:

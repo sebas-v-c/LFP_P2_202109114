@@ -3,6 +3,7 @@ from tkinter import ttk
 
 import InitialWindow
 import LoadFiles.load_files
+import Gramatics.GramaticsOptions as GramaticsOptions
 
 
 class View(ttk.Frame):
@@ -88,6 +89,7 @@ class Controller:
         controller = LoadFiles.load_files.Controller(self._app, gramatics=True)
 
     def general_info_button(self):
+        controller = GramaticsOptions.GeneralController(self._app)
         pass
 
     def derivation_tree_button(self):
