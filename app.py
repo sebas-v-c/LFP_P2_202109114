@@ -16,8 +16,8 @@ class App(Tk):
         self.title("Spark Stark")
 
         # App variables
-        # self.afd_objects = []
-        # self.gr_objects = []
+        self.gramatics_objects = []
+        self.automaton_objects = []
         # self.AFD_EXAMPLE_IMAGE = (
         #     os.path.dirname(os.path.realpath(__file__)) + "/Res/afd_help.png"
         # )

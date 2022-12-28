@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 
-import time
-import threading
+import Gramatics
+import Automaton
 
 import InitialWindow
 
@@ -76,7 +76,7 @@ class Controller:
         controller = InitialWindow.InitController(self._app, exit=True)
 
     def free_context_gramatic_button(self):
-        pass
+        controller = Gramatics.GramaticsController(self._app)
 
     def stack_automaton_button(self):
-        pass
+        controller = Automaton.AutomatonController(self._app)
