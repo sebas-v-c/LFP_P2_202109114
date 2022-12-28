@@ -20,14 +20,6 @@ class View(ttk.Frame):
         title_label = ttk.Label(self, text="Carga De Archivos", font=("Arial Bold", 20))
         title_label.grid(row=1, column=2)
 
-        # -----------------------------------Path-------------------------------#
-        path_label = ttk.Label(self, text="Ruta: ")
-        path_label.grid(row=2, column=1, sticky="e")
-
-        self.path = StringVar()
-        path_entry = ttk.Entry(self, textvariable=self.path)
-        path_entry.grid(row=2, column=3)
-
         # -----------------------------------Search File-------------------------------#
         search_button = ttk.Button(
             self, text="Buscar Archivo", command=self.search_button_pressed
@@ -100,46 +92,49 @@ class Controller:
             return
 
         lines: list[str] = self.file.readlines()
-        # strip out the new line character
+        # strip out the new line character or empty character
         lines = list(map(lambda x: x.strip("\n"), lines))
+        lines = list(map(lambda x: x.strip(), lines))
 
-        new_afd_list = []
+        new_gramatics_list: list[Gramatics.Gramatic] = []
         line_num = 0
-        afd_transitions: list[str] = []
-        new_afd: AFD
+        gramatic_productions: list[str] = []
+        new_gramatic: Gramatics.Gramatic
         file_lines = len(lines)
 
         for line in range(len(lines)):
             if line_num == 0:
-                new_afd = AFD(lines[line])
+                new_gramatic = Gramatics.Gramatic(lines[line])
 
             if lines[line][0] == "%":
                 line_num = 0
-                new_afd.transitions = "\n".join(afd_transitions)
-                new_afd_list.append(new_afd)
-                afd_transitions = []
+                new_gramatic.productions = ";".join(gramatic_productions)
+                new_gramatics_list.append(new_gramatic)
+                gramatic_productions = []
                 continue
 
             # fill afd parameters
             if line_num == 1:
-                new_afd.states = lines[line].replace(",", ";")
+                new_gramatic.no_terminals = lines[line].replace(",", ";")
             elif line_num == 2:
-                new_afd.alfabet = lines[line].replace(",", ";")
+                new_gramatic.terminals = lines[line].replace(",", ";")
             elif line_num == 3:
-                new_afd.initial_state = lines[line]
-            elif line_num == 4:
-                new_afd.acceptance_states = lines[line].replace(",", ";")
-            elif line_num >= 5:
-                afd_transitions.append(lines[line])
+                new_gramatic.initial_no_terminal = lines[line]
+            elif line_num >= 4:
+                gramatic_productions.append(lines[line])
 
             if line == file_lines - 1:
-                afd_transitions.append(lines[line])
-                new_afd.transitions = "\n".join(afd_transitions)
-                new_afd_list.append(new_afd)
+                gramatic_productions.append(lines[line])
+                new_gramatic.productions = ";".join(gramatic_productions)
+                new_gramatics_list.append(new_gramatic)
 
             line_num += 1
 
-        self._app.afd_objects = self._app.afd_objects + new_afd_list
+        new_gramatics_list = list(
+            filter(lambda item: item.is_free_of_context(), new_gramatics_list)
+        )
+
+        self._app.gramatics_objects = self._app.gramatics_objects + new_gramatics_list
         self._view.label_error.set("Archivo cargado con éxito")
 
     def _load_automaton(self):
@@ -192,12 +187,12 @@ class Controller:
         if self.gramatics:
             file = askopenfile(
                 mode="r",
-                filetypes=[("Archivos Automata de Pila", "*.ap")],
+                filetypes=[("Archivos de Gramaticas", "*.glc")],
             )
         elif self.automaton:
             file = askopenfile(
                 mode="r",
-                filetypes=[("Archivos de Gramaticas", "*.glc")],
+                filetypes=[("Archivos Automata de Pila", "*.ap")],
             )
 
         if file is None:
@@ -209,5 +204,6 @@ class Controller:
     def return_button(self):
         if self.gramatics:
             controller = Gramatics.GramaticsController(self._app)
+            print(self._app.gramatics_objects)
         elif self.automaton:
             controller = Automaton.AutomatonController(self._app)

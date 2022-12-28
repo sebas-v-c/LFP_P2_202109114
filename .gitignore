@@ -130,3 +130,6 @@ dmypy.json
 
 # intructivo
 intructivo.pdf
+
+# test files
+*.glc

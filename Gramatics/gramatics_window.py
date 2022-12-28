@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 
 import InitialWindow
+import LoadFiles.load_files
 
 
 class View(ttk.Frame):
@@ -84,7 +85,7 @@ class Controller:
         controller = InitialWindow.MenuController(self._app)
 
     def load_file_button(self):
-        pass
+        controller = LoadFiles.load_files.Controller(self._app, gramatics=True)
 
     def general_info_button(self):
         pass
