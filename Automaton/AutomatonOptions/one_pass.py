@@ -1,9 +1,14 @@
+import threading
 from tkinter import *
 from tkinter import ttk
-from Automaton.stack_automaton import InvalidStringException
 
+import os
+import subprocess
 
 import Automaton
+
+# from Automaton import StackAutomaton
+import Automaton.Graphviz as Graphviz
 
 DOT_FILE_NAME = ".input_route.out"
 PDF_FILE_NAME = "output_route.pdf"
@@ -17,10 +22,12 @@ class View(ttk.Frame):
 
         self.controller = None
 
-        parent.title("Validar Una Cadena")
+        parent.title("Validar En Una Pasada")
 
         # -----------------------------------Title-------------------------------#
-        title_label = ttk.Label(self, text="Validar Cadena", font=("Arial Bold", 15))
+        title_label = ttk.Label(
+            self, text="Validar En Una Pasada", font=("Arial Bold", 15)
+        )
         title_label.grid(row=1, column=2)
 
         # -----------------------------------STACK_AUTOMATON Label-------------------------------#
@@ -48,9 +55,9 @@ class View(ttk.Frame):
 
         # -----------------------------------validate button-------------------------------#
         self.validate_only_button = ttk.Button(
-            self, text="Solo Validar", command=self.validate_only_button_pressed
+            self, text="Validar", command=self.validate_only_button_pressed
         )
-        self.validate_only_button.grid(row=4, column=1)
+        self.validate_only_button.grid(row=3, column=3)
         self.validate_only_button.state(["disabled"])
 
         # -----------------------------------validate label-------------------------------#
@@ -122,7 +129,7 @@ class Controller:
 
     def validate_only(self):
         stack_automaton_name = self._view.stack_automaton_combobox.get()
-        automaton_object: Automaton.StackAutomaton
+        # automaton_object: StackAutomaton
         for stack_automaton in self._app.automaton_objects:
             if stack_automaton.name == stack_automaton_name:
                 automaton_object = stack_automaton
@@ -141,10 +148,54 @@ class Controller:
                 "La Cadena Introducida No Es Válida"
             )
         else:
+            self._generate_route_one_pass(steps, string, automaton_object)
             self._view.validate_stack_automaton_label.config(foreground="green")
             self._view.validate_stack_automaton.set(
                 "La Cadena Introducida Sí Es Válida"
             )
+
+    def _generate_route_one_pass(self, steps, string, automaton_object):
+        # generate diagraph and description
+        # try:
+        table: str = (
+            "digraph G {\n"
+            + Graphviz.create_table_diagraph(steps, automaton_object.name, string)
+            + "\n}"
+        )
+        # except:
+        self._view.validate_stack_automaton_label.config(foreground="red")
+        self._view.validate_stack_automaton.set(
+            "Ha un error al generar el archivo .dot"
+        )
+        # return
+
+        cwd = os.getcwd()
+
+        try:
+            os.remove(cwd + "/" + DOT_FILE_NAME)
+        except:
+            pass
+
+        with open(DOT_FILE_NAME, mode="w") as f:
+            f.write(table)
+
+        try:
+            os.system("dot -Tpdf " + DOT_FILE_NAME + " > " + PDF_FILE_NAME)
+        except:
+            self._view.validate_stack_automaton_label.set(
+                "Ha ocurrido un error al generar el archivo pdf"
+            )
+
+        try:
+            thread = threading.Thread(target=self._open_document, args=[cwd])
+            thread.start()
+        except:
+            self._view.validate_stack_automaton.set(
+                "Ha ocurrido un error al abrir el archivo pdf"
+            )
+
+    def _open_document(self, cwd):
+        os.system("zathura " + cwd + "/" + PDF_FILE_NAME)
 
     def combobox_selected(self):
         self._view.validate_stack_automaton.set("")

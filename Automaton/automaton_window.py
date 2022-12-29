@@ -7,6 +7,7 @@ import LoadFiles.load_files
 from Automaton.AutomatonOptions import InfoController
 from Automaton.AutomatonOptions import ValidateController
 from Automaton.AutomatonOptions import RouteController
+from Automaton.AutomatonOptions import PassController
 
 
 class View(ttk.Frame):
@@ -138,4 +139,4 @@ class Controller:
         pass
 
     def one_pass_button(self):
-        pass
+        controller = PassController(self._app)

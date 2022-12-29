@@ -1,9 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 
-import os
 import threading
-
+import os
 import Automaton
 import Automaton.Graphviz as Graphviz
 from Automaton.stack_automaton import StackAutomaton
@@ -159,10 +158,6 @@ class Controller:
             thread = threading.Thread(target=self.open_document, args=[cwd])
             thread.start()
         except:
-            self._view.generate_report.set(
-                "Ha ocurrido un error al abrir el archivo pdf"
-            )
-        else:
             self._view.generate_report.set(
                 "Ha ocurrido un error al abrir el archivo pdf"
             )

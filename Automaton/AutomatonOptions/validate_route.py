@@ -153,9 +153,7 @@ class Controller:
         else:
             formated_lines = []
             for step in steps:
-                formated_lines.append(
-                    f"{step.origin},{step.entry},{step.pop_stack};{step.destination},{step.push_stack}"
-                )
+                formated_lines.append(str(step))
 
             self._view.validation_route_textarea.insert(
                 "1.0", "\n".join(formated_lines)
