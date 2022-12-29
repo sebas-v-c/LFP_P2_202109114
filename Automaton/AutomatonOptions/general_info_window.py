@@ -23,7 +23,9 @@ class View(ttk.Frame):
         parent.title("Crear Reporte")
 
         # -----------------------------------Title-------------------------------#
-        title_label = ttk.Label(self, text="Generar Reporte", font=("Arial Bold", 15))
+        title_label = ttk.Label(
+            self, text="Información Del Autómata", font=("Arial Bold", 15)
+        )
         title_label.grid(row=1, column=2)
 
         # -----------------------------------StackAutomaton Combobox-------------------------------#

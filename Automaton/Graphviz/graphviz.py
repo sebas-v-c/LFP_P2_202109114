@@ -38,8 +38,8 @@ def create_stack_automaton_diagraph(stack_automaton: StackAutomaton) -> str:
     for state in stack_automaton.acceptance_states:
         lines.append(state + " [peripheries=2];")
 
-    lines.append('INICIO [shape="triangle"]')
-    lines.append("INICIO -> " + stack_automaton.initial_state + ";")
+    # lines.append('INICIO [shape="triangle"]')
+    # lines.append("INICIO -> " + stack_automaton.initial_state + ";")
     # add transitions
     for transition in stack_automaton.transitions:
         lines.append(

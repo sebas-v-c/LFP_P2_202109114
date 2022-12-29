@@ -1,6 +1,34 @@
 separator = ";"
 
 
+class EmptyStackException(Exception):
+    pass
+
+
+class Stack:
+    def __init__(self) -> None:
+        self.__index = []
+
+    def __len__(self):
+        return len(self.__index)
+
+    def push(self, item):
+        self.__index.insert(0, item)
+
+    def peek(self):
+        if len(self) == 0:
+            raise EmptyStackException("peek() called on empty stack.")
+        return self.__index[0]
+
+    def pop(self):
+        if len(self) == 0:
+            raise EmptyStackException("pop() called on empty stack")
+        return self.__index.pop(0)
+
+    def __str__(self) -> str:
+        return str(self.__index)
+
+
 class Transition:
     def __init__(self, origin, entry, pop_stack, destination, push_stack) -> None:
         self.origin = origin
@@ -141,11 +169,19 @@ class StackAutomaton:
 
     def evaluate_string(self, string: str) -> list[Transition]:
         # TODO change this code validate with lambda and a stack
+        self.stack = Stack()
         transitions: list[Transition] = []
         state = self.initial_state
         # current_state = self.initial_state
         string_list = list(string)
         in_acceptance_state = False
+
+        # get the transitions from the first state with a lambda entry
+        lambda_transition: list[Transition] = self._get_correct_transitions(state, "$")
+        state = lambda_transition[0].destination
+        # remove or add from stack the current transition
+        self._remove_add_to_stack(lambda_transition[0])
+        transitions.append(lambda_transition[0])
 
         for char in string_list:
             # if character is not in alfabet
@@ -153,23 +189,20 @@ class StackAutomaton:
                 raise InvalidStringException(
                     "The character doesn't belong to the alfabet"
                 )
-            # given the current state get available transitions
-            available_transitions: list[Transition] = list(
-                filter(lambda transition: transition.origin == state, self.transitions)
+
+            correct_transition: list[Transition] = self._get_correct_transitions(
+                state, char
             )
 
-            # given the available transitions, get the correct one
-            correct_transition: list[Transition] = list(
-                filter(
-                    lambda transition: transition.entry == char,
-                    available_transitions,
-                )
-            )
-
+            # if there is no available transition with this letter
             if len(correct_transition) == 0:
                 raise InvalidStringException("There is no transition with this letter")
 
+            # we get the first available transitions from the list
+            # and chage states
             state = correct_transition[0].destination
+            # remove or add from stack the current transition
+            self._remove_add_to_stack(correct_transition[0])
             transitions.append(correct_transition[0])
 
             if state in self._acceptance_states:
@@ -177,10 +210,47 @@ class StackAutomaton:
             else:
                 in_acceptance_state = False
 
-        if not in_acceptance_state:
+        # get the transitions from the first state with a lambda entry
+        lambda_transition: list[Transition] = self._get_correct_transitions(state, "$")
+        state = lambda_transition[0].destination
+        # remove or add from stack the current transition
+        self._remove_add_to_stack(lambda_transition[0])
+        transitions.append(lambda_transition[0])
+
+        if state in self._acceptance_states:
+            in_acceptance_state = True
+        else:
+            in_acceptance_state = False
+
+        if not (in_acceptance_state and len(self.stack) == 0):
             raise InvalidStringException("The string ended in no acceptance state")
 
         return transitions
+
+    # function for getting the correct transition
+    def _get_correct_transitions(self, state: str, char: str) -> list[Transition]:
+        # given the current state get available transitions
+        available_transitions: list[Transition] = list(
+            filter(lambda transition: transition.origin == state, self.transitions)
+        )
+
+        # given the available transitions, get the one that match the char
+        correct_transition: list[Transition] = list(
+            filter(
+                lambda transition: transition.entry == char,
+                available_transitions,
+            )
+        )
+        return correct_transition
+
+    def _remove_add_to_stack(self, transition: Transition):
+        if transition.pop_stack != "$":
+            if len(self.stack) == 0:
+                raise InvalidStringException("Stack is empty")
+            if self.stack.pop() != transition.pop_stack():
+                raise InvalidStringException("Stack cant pop current item")
+        if not transition.push_stack != "$":
+            self.stack.push(transition.push_stack)
 
     def __str__(self):
         return f"Name: {self.name}\nStates: {self._states}\nAlfabet: {self._alfabet}\nInitial State: {self._initial_state}\nAcceptance States: {self._acceptance_states}"
