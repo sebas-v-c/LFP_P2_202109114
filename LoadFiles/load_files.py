@@ -139,6 +139,7 @@ class Controller:
         self.return_button()
 
     def _load_automaton(self):
+        # TODO re adapt this
         if self.file is None:
             return
 
@@ -146,42 +147,47 @@ class Controller:
         # strip out the new line character
         lines = list(map(lambda x: x.strip("\n"), lines))
 
-        new_gr_list = []
+        new_automaton_list = []
         line_num = 0
-        gr_productions: list[str] = []
-        new_gr: GR
+        automaton_transitions: list[str] = []
+        new_automaton: Automaton.StackAutomaton
         file_lines = len(lines)
 
         for line in range(len(lines)):
             if line_num == 0:
-                new_gr = GR(lines[line])
+                new_automaton = Automaton.StackAutomaton(lines[line])
 
             if lines[line][0] == "%":
                 line_num = 0
-                new_gr.productions = ";".join(gr_productions)
-                new_gr_list.append(new_gr)
-                gr_productions = []
+                new_automaton.transitions = "\n".join(automaton_transitions)
+                new_automaton_list.append(new_automaton)
+                automaton_transitions = []
                 continue
 
             # fill afd parameters
             if line_num == 1:
-                new_gr.no_terminals = lines[line].replace(",", ";")
+                new_automaton.alfabet = lines[line].replace(",", ";")
             elif line_num == 2:
-                new_gr.terminals = lines[line].replace(",", ";")
+                new_automaton.stack_alfabet = lines[line].replace(",", ";")
             elif line_num == 3:
-                new_gr.initial_no_terminal = lines[line]
-            elif line_num >= 4:
-                gr_productions.append(lines[line])
+                new_automaton.states = lines[line].replace(",", ";")
+            elif line_num == 4:
+                new_automaton.initial_state = lines[line].strip("\n")
+            elif line_num == 5:
+                new_automaton.acceptance_states = lines[line].replace(",", ";")
+            elif line_num >= 6:
+                automaton_transitions.append(lines[line])
 
             if line == file_lines - 1:
-                gr_productions.append(lines[line])
-                new_gr.productions = ";".join(gr_productions)
-                new_gr_list.append(new_gr)
+                automaton_transitions.append(lines[line])
+                new_automaton.transitions = "\n".join(automaton_transitions)
+                new_automaton_list.append(new_automaton)
 
             line_num += 1
 
-        self._app.gr_objects = self._app.gr_objects + new_gr_list
+        self._app.automaton_objects = self._app.automaton_objects + new_automaton_list
         self._view.label_error.set("Archivo cargado con éxito")
+        self.return_button()
 
     def search_file(self):
         file = None
