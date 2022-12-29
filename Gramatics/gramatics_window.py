@@ -45,7 +45,7 @@ class View(ttk.Frame):
             self,
             text="Regresar",
             command=self.return_button_pressed,
-        ).grid(column=2, row=4, sticky="WE")
+        ).grid(column=2, row=5, sticky="WE")
 
         self.add_padding()
 
@@ -90,7 +90,6 @@ class Controller:
 
     def general_info_button(self):
         controller = GramaticsOptions.GeneralController(self._app)
-        pass
 
     def derivation_tree_button(self):
-        pass
+        controller = GramaticsOptions.TreeController(self._app)

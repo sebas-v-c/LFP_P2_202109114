@@ -70,10 +70,9 @@ class View(ttk.Frame):
         productions_label = ttk.Label(self, text="Productions: ")
         productions_label.grid(row=7, column=0, sticky="e")
 
-        self.productions_textarea = Text(self, width=20, height=10)
-        # self.productions_textarea.insert("1.0", "Ejemplo:\n\nA,1;B\nA,2;B\nB,1;C\n...")
+        self.productions_textarea = Text(self, width=30, height=10)
         self.productions_textarea.grid(row=8, column=0, columnspan=2)
-        self.productions_textarea.config(state=DISABLED)
+        # self.productions_textarea.config(state=DISABLED)
 
         # -----------------------------------Return button-------------------------------#
         return_button = ttk.Button(
@@ -140,10 +139,47 @@ class Controller:
         # change productions value
         # First convert productions into a dictionary {index: value}
         productions_dict: dict = {
-            index: item for item, index in enumerate(gramatic.productions)
+            index: item for index, item in enumerate(gramatic.productions)
         }
+        productions_dict_copy = productions_dict.copy()
 
         string = []
-        for production, index in productions_dict.items():
+        removed_items = 0
 
-            pass
+        # loop throu productions
+        while True:
+            # if there are no more item break from the loop
+            if (
+                len(productions_dict_copy) == 0
+                and len(productions_dict) == removed_items
+            ):
+                break
+
+            # get the new first key from the remaining items in the dictionary
+            new_first_key = list(productions_dict_copy.keys())[0]
+            # get the current production
+            current_production = productions_dict_copy.pop(new_first_key)
+            removed_items += 1
+            # append a new item
+            string.append(
+                current_production.origin
+                + "\t> "
+                + " ".join(current_production.destinations)
+            )
+
+            index_to_remove = []
+            # search for same production origin in the file
+            for index, production in productions_dict_copy.items():
+                # if the index is this key
+                if index == new_first_key:
+                    continue
+                if current_production.origin == production.origin:
+                    string.append("\t| " + " ".join(production.destinations))
+                    index_to_remove.append(index)
+                    removed_items += 1
+            # remove all indexes
+            for index in index_to_remove:
+                productions_dict_copy.pop(index)
+
+        # end of loop
+        self._view.productions_textarea.insert("1.0", "\n".join(string))
