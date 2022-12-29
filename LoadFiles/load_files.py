@@ -124,7 +124,7 @@ class Controller:
                 gramatic_productions.append(lines[line])
 
             if line == file_lines - 1:
-                gramatic_productions.append(lines[line])
+                # gramatic_productions.append(lines[line])
                 new_gramatic.productions = ";".join(gramatic_productions)
                 new_gramatics_list.append(new_gramatic)
 
@@ -179,7 +179,7 @@ class Controller:
                 automaton_transitions.append(lines[line])
 
             if line == file_lines - 1:
-                automaton_transitions.append(lines[line])
+                # automaton_transitions.append(lines[line])
                 new_automaton.transitions = "\n".join(automaton_transitions)
                 new_automaton_list.append(new_automaton)
 

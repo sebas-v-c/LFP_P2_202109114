@@ -5,6 +5,8 @@ import InitialWindow
 import LoadFiles.load_files
 
 from Automaton.AutomatonOptions import InfoController
+from Automaton.AutomatonOptions import ValidateController
+from Automaton.AutomatonOptions import RouteController
 
 
 class View(ttk.Frame):
@@ -56,10 +58,10 @@ class View(ttk.Frame):
         ).grid(column=2, row=3, sticky="WE")
 
         # -----------------------------------One pass-------------------------------#
-        validate_string_button = ttk.Button(
+        onepass_button = ttk.Button(
             self,
-            text="Validar Cadena",
-            command=self.validate_string_button_pressed,
+            text="Validar A Una Pasa",
+            command=self.one_pass_button_pressed,
         ).grid(column=2, row=4, sticky="WE")
 
         # -----------------------------------Return button-------------------------------#
@@ -90,6 +92,10 @@ class View(ttk.Frame):
     def step_by_step_button_pressed(self):
         if self.controller:
             self.controller.step_by_step_button()
+
+    def one_pass_button_pressed(self):
+        if self.controller:
+            self.controller.one_pass_button()
 
     def set_controller(self, controller):
         self.controller = controller
@@ -122,10 +128,14 @@ class Controller:
         controller = InfoController(self._app)
 
     def validate_string_button(self):
-        pass
+        controller = ValidateController(self._app)
 
-    def validate_route_button(self):
+    def validation_route_button(self):
+        controller = RouteController(self._app)
         pass
 
     def step_by_step_button(self):
+        pass
+
+    def one_pass_button(self):
         pass

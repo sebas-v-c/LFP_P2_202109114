@@ -2,13 +2,10 @@ digraph G {
 rankdir=LR;
 S0;S1;S2;S3;
 S3 [peripheries=2];
-INICIO [shape="triangle"]
-INICIO -> S0;
 S0 -> S1 [label="$,$;#"];
 S1 -> S1 [label="x,$;x"];
 S1 -> S2 [label="y,x;$"];
 S2 -> S2 [label="y,x;$"];
-S2 -> S3 [label="$,#;$"];
 S2 -> S3 [label="$,#;$"];
 node [shape=circle];
 fontsize=40

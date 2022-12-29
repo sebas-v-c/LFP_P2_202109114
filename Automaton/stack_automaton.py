@@ -168,7 +168,6 @@ class StackAutomaton:
         self._transitions = new_transitions_list
 
     def evaluate_string(self, string: str) -> list[Transition]:
-        # TODO change this code validate with lambda and a stack
         self.stack = Stack()
         transitions: list[Transition] = []
         state = self.initial_state
@@ -247,9 +246,9 @@ class StackAutomaton:
         if transition.pop_stack != "$":
             if len(self.stack) == 0:
                 raise InvalidStringException("Stack is empty")
-            if self.stack.pop() != transition.pop_stack():
+            if self.stack.pop() != transition.pop_stack:
                 raise InvalidStringException("Stack cant pop current item")
-        if not transition.push_stack != "$":
+        if transition.push_stack != "$":
             self.stack.push(transition.push_stack)
 
     def __str__(self):
