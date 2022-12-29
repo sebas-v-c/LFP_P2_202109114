@@ -47,9 +47,6 @@ class StackAutomaton:
 
     @alfabet.setter
     def alfabet(self, value: str):
-        if len(self._states) == 0:
-            raise AlfabetException("states property is empty")
-
         new_alfabet = value.split(separator)
         # if there are duplicate items in the alfabet we raise an error
         if len(new_alfabet) != len(set(new_alfabet)):
@@ -67,9 +64,6 @@ class StackAutomaton:
 
     @stack_alfabet.setter
     def stack_alfabet(self, value: str):
-        if len(self._states) == 0:
-            raise StackAlfabetException("states property is empty")
-
         new_stack_alfabet = value.split(separator)
         # if there are duplicate items in the alfabet we raise an error
         if len(new_stack_alfabet) != len(set(new_stack_alfabet)):

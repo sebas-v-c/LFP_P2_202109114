@@ -1,0 +1,23 @@
+digraph G {
+rankdir=LR;
+S0;S1;S2;S3;
+S3 [peripheries=2];
+INICIO [shape="triangle"]
+INICIO -> S0;
+S0 -> S1 [label="$,$;#"];
+S1 -> S1 [label="x,$;x"];
+S1 -> S2 [label="y,x;$"];
+S2 -> S2 [label="y,x;$"];
+S2 -> S3 [label="$,#;$"];
+S2 -> S3 [label="$,#;$"];
+node [shape=circle];
+fontsize=40
+NodeLabel [shape=none fontsize=18 fontname = "monospace" label = <
+Nombre: AP2<br/>
+Estados: S0 S1 S2 S3<br align="left"/>
+Alfabeto: x y<br align="left"/>
+Alfabeto De Pila: x y #<br align="left"/>
+Estados de aceptación: S3<br align="left"/>
+Estado inicial: S0<br align="left"/>
+>];
+}

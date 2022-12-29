@@ -4,6 +4,8 @@ from tkinter import ttk
 import InitialWindow
 import LoadFiles.load_files
 
+from Automaton.AutomatonOptions import InfoController
+
 
 class View(ttk.Frame):
     def __init__(self, parent) -> None:
@@ -117,7 +119,7 @@ class Controller:
         controller = LoadFiles.load_files.Controller(self._app, automaton=True)
 
     def general_info_button(self):
-        pass
+        controller = InfoController(self._app)
 
     def validate_string_button(self):
         pass
