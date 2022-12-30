@@ -37,7 +37,7 @@ class View(ttk.Frame):
         self.canvas = Canvas(
             self,
             width=500,
-            height=800,
+            height=900,
         )
         self.canvas.grid(row=3, column=0, columnspan=2, sticky="WE")
         # imgobj = PhotoImage(file="./Res/afd_help.png")

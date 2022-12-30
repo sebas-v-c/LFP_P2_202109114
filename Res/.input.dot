@@ -2,10 +2,10 @@ digraph G{
 rankdir=LR;
 I;A;B;C;F;
 F [peripheries=2];
-B [style=filled fillcolor="#96CDFB"];
+F [style=filled fillcolor="#96CDFB"];
 I -> A [label="$,$;#"];
 A -> B [label="a,$;a"];
-B -> B [label="a,$;a" fontcolor="red"];
+B -> B [label="a,$;a"];
 B -> C [label="b,a;$"];
 C -> C [label="b,a;$"];
 C -> F [label="$,#;$"];
@@ -17,8 +17,8 @@ label =<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
 <td><B>Entrada</B></td>
 </tr>
 <tr>
-<td>a#</td>
-<td>a</td>
+<td></td>
+<td>aaabbb</td>
 </tr>
 </TABLE>>
 shape="none"

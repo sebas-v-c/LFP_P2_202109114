@@ -182,4 +182,6 @@ class Controller:
                 productions_dict_copy.pop(index)
 
         # end of loop
+        self._view.productions_textarea.delete("1.0", END)
+        self._view.productions_textarea.update()
         self._view.productions_textarea.insert("1.0", "\n".join(string))

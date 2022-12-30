@@ -154,7 +154,8 @@ class Controller:
             formated_lines = []
             for step in steps:
                 formated_lines.append(str(step))
-
+            self._view.validation_route_textarea.delete("1.0", END)
+            self._view.validation_route_textarea.update()
             self._view.validation_route_textarea.insert(
                 "1.0", "\n".join(formated_lines)
             )

@@ -109,8 +109,21 @@ class Controller:
             if lines[line][0] == "%":
                 line_num = 0
                 new_gramatic.productions = ";".join(gramatic_productions)
-                new_gramatics_list.append(new_gramatic)
+                if (
+                    len(
+                        list(
+                            filter(
+                                lambda x: x.name == new_gramatic.name,
+                                self._app.gramatics_objects,
+                            )
+                        )
+                    )
+                    > 0
+                ):
+                    gramatic_productions = []
+                    continue
                 gramatic_productions = []
+                new_gramatics_list.append(new_gramatic)
                 continue
 
             # fill afd parameters
@@ -126,6 +139,18 @@ class Controller:
             if line == file_lines - 1:
                 # gramatic_productions.append(lines[line])
                 new_gramatic.productions = ";".join(gramatic_productions)
+                if (
+                    len(
+                        list(
+                            filter(
+                                lambda x: x.name == new_gramatic.name,
+                                self._app.gramatics_objects,
+                            )
+                        )
+                    )
+                    > 0
+                ):
+                    continue
                 new_gramatics_list.append(new_gramatic)
 
             line_num += 1
@@ -160,6 +185,19 @@ class Controller:
             if lines[line][0] == "%":
                 line_num = 0
                 new_automaton.transitions = "\n".join(automaton_transitions)
+                if (
+                    len(
+                        list(
+                            filter(
+                                lambda x: x.name == new_automaton.name,
+                                self._app.automaton_objects,
+                            )
+                        )
+                    )
+                    > 0
+                ):
+                    automaton_transitions = []
+                    continue
                 new_automaton_list.append(new_automaton)
                 automaton_transitions = []
                 continue
@@ -181,6 +219,18 @@ class Controller:
             if line == file_lines - 1:
                 # automaton_transitions.append(lines[line])
                 new_automaton.transitions = "\n".join(automaton_transitions)
+                if (
+                    len(
+                        list(
+                            filter(
+                                lambda x: x.name == new_automaton.name,
+                                self._app.automaton_objects,
+                            )
+                        )
+                    )
+                    > 0
+                ):
+                    continue
                 new_automaton_list.append(new_automaton)
 
             line_num += 1
