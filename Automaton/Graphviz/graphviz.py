@@ -111,62 +111,62 @@ def create_table_diagraph(transitions: list[Transition], name: str, string: str)
     return "\n".join(lines)
 
 
-def create_route_diagraph(stack_automaton: StackAutomaton, transitions: list) -> str:
-    lines: list[str] = []
+def create_mini_table_diagraph(stack, entry) -> str:
+    lines = []
+    lines.append("node [shape=record];")
+    lines.append('"node" [')
+    lines.append('label =<<TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">')
 
-    lines.append("rankdir=LR;")
-    lines.append("")
+    lines.append("<tr>")
+    lines.append("<td><B>Pila</B></td>")
+    lines.append("<td><B>Entrada</B></td>")
+    lines.append("</tr>")
 
-    for i in range(len(transitions)):
-        lines[1] += str(i) + ";"
+    lines.append("<tr>")
+    lines.append(f"<td>{stack}</td>")
+    lines.append(f"<td>{entry}</td>")
+    lines.append("</tr>")
 
-    lines.append(str(len(transitions)) + " [peripheries=2];")
-
-    lines.append('INICIO [shape="triangle"]')
-    lines.append("INICIO -> 0;")
-
-    for i in range(len(transitions)):
-        lines.append(
-            " -> ".join([str(i), str(i + 1)])
-            + ' [label="'
-            + transitions[i].entry
-            + '"];'
-        )
-
+    lines.append("</TABLE>>")
+    lines.append('shape="none"')
+    lines.append("];")
     return "\n".join(lines)
 
 
-def create__route_description(
-    stack_automaton: StackAutomaton, transitions: list, string: str
+def create_colored_diagraph(
+    stack_automaton: StackAutomaton, current_tranistion: Transition, last_item=False
 ) -> str:
-    """Generate a description in Graphviz Syntax for the transitions that the
-    StackAutomaton took"""
     lines: list[str] = []
 
-    lines.append("node [shape=circle];")
-    lines.append("fontsize=40")
-    lines.append("NodeLabel [shape=none fontsize=18 label = <")
-    lines.append("Nombre: " + stack_automaton.name + "<br/>")
+    lines.append("rankdir=LR;")
 
-    align_left = '<br align="left"/>'
+    lines.append(";".join(stack_automaton.states) + ";")
 
-    lines.append("Estados: " + " ".join(stack_automaton.states) + align_left)
-    lines.append("Alfabeto: " + " ".join(stack_automaton.alfabet) + align_left)
-    lines.append(
-        "Estados de aceptación: "
-        + " ".join(stack_automaton.acceptance_states)
-        + align_left
-    )
-    lines.append("Estado inicial: " + stack_automaton.initial_state + align_left)
-    lines.append("Transiciones Realizadas: " + align_left)
+    # add acceptance state
+    for state in stack_automaton.acceptance_states:
+        lines.append(state + " [peripheries=2];")
 
-    num = 1
-    for transition in transitions:
-        lines.append(str(num) + ". " + str(transition) + align_left)
-        num += 1
+    if not last_item:
+        lines.append(current_tranistion.origin + ' [style=filled fillcolor="#96CDFB"];')
+    else:
+        lines.append(
+            current_tranistion.destination + ' [style=filled fillcolor="#96CDFB"];'
+        )
 
-    lines.append(" " + align_left)
-    lines.append("Cadena ingresada: " + string + align_left)
-    lines.append(">];")
+    # add transitions
+    for transition in stack_automaton.transitions:
+        temp_str = (
+            " -> ".join([transition.origin, transition.destination])
+            + ' [label="'
+            + ",".join([transition.entry, transition.pop_stack])
+            + ";"
+            + transition.push_stack
+        )
+        if transition != current_tranistion or last_item:
+            temp_str = temp_str + '"];'
+        else:
+            temp_str = temp_str + '" fontcolor="red"];'
+
+        lines.append(temp_str)
 
     return "\n".join(lines)

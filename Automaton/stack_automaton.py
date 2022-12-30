@@ -37,6 +37,18 @@ class Transition:
         self.destination = destination
         self.push_stack = push_stack
 
+    def __eq__(self, other):
+        if isinstance(other, Transition):
+            return (
+                other.origin == self.origin
+                and other.entry == self.entry
+                and other.pop_stack == self.pop_stack
+                and other.destination == self.destination
+                and other.push_stack == self.push_stack
+            )
+        else:
+            return False
+
     def __str__(self) -> str:
         return f"{self.origin},{self.entry},{self.pop_stack};{self.destination},{self.push_stack}"
 

@@ -8,6 +8,7 @@ from Automaton.AutomatonOptions import InfoController
 from Automaton.AutomatonOptions import ValidateController
 from Automaton.AutomatonOptions import RouteController
 from Automaton.AutomatonOptions import PassController
+from Automaton.AutomatonOptions import StepController
 
 
 class View(ttk.Frame):
@@ -54,7 +55,7 @@ class View(ttk.Frame):
         # -----------------------------------Step by step-------------------------------#
         step_by_step_button = ttk.Button(
             self,
-            text="Información General",
+            text="Evaluar Paso A Paso",
             command=self.step_by_step_button_pressed,
         ).grid(column=2, row=3, sticky="WE")
 
@@ -133,10 +134,9 @@ class Controller:
 
     def validation_route_button(self):
         controller = RouteController(self._app)
-        pass
 
     def step_by_step_button(self):
-        pass
+        controller = StepController(self._app)
 
     def one_pass_button(self):
         controller = PassController(self._app)
