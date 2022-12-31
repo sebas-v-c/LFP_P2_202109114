@@ -55,7 +55,7 @@ class View(ttk.Frame):
         self.validation_route_button.state(["disabled"])
 
         # -----------------------------------Validations route-------------------------------#
-        validation_route_label = ttk.Label(self, text="Productions: ")
+        validation_route_label = ttk.Label(self, text="Ruta: ")
         validation_route_label.grid(row=4, column=0, sticky="e")
 
         self.validation_route_textarea = Text(self, width=30, height=12)
@@ -141,6 +141,7 @@ class Controller:
             return
 
         string = self._view.stack_automaton_string.get()
+        self._view.validation_route_textarea.delete("1.0", END)
 
         try:
             steps: list[Automaton.Transition] = automaton_object.evaluate_string(string)

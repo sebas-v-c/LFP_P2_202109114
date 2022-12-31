@@ -18,12 +18,6 @@ class App(Tk):
         # App variables
         self.gramatics_objects = []
         self.automaton_objects = []
-        # self.AFD_EXAMPLE_IMAGE = (
-        #     os.path.dirname(os.path.realpath(__file__)) + "/Res/afd_help.png"
-        # )
-        # self.GR_EXAMPLE_IMAGE = (
-        #     os.path.dirname(os.path.realpath(__file__)) + "/Res/gr_help.png"
-        # )
 
     def switch_frame(self, frame_class):
         new_frame = frame_class
