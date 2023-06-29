@@ -73,7 +73,7 @@ class Controller:
         self._view = View(app)
         app.switch_frame(self._view)
 
-        self._view.set_controller(self)
+        self._view.controller = self
 
         try:
             thread = threading.Thread(target=self.update_count_down, args=[exit])

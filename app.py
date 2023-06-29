@@ -7,6 +7,7 @@ import InitialWindow
 import os
 
 
+
 class App(Tk):
     def __init__(self) -> None:
         Tk.__init__(self)

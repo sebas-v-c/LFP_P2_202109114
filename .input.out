@@ -1,21 +1,11 @@
 digraph G {
 rankdir=LR;
-I;A;B;C;F;
-F [peripheries=2];
-I -> A [label="$,$;#"];
-A -> B [label="a,$;a"];
-B -> B [label="a,$;a"];
-B -> C [label="b,a;$"];
-C -> C [label="b,a;$"];
-C -> F [label="$,#;$"];
+A;B;C;D
+A -> B [];
+A -> C [];
+C -> D [];
+D -> C [];
+
 node [shape=circle];
 fontsize=40
-NodeLabel [shape=none fontsize=18 fontname = "monospace" label = <
-Nombre: AP1<br/>
-Estados: I A B C F<br align="left"/>
-Alfabeto: a b<br align="left"/>
-Alfabeto De Pila: a b #<br align="left"/>
-Estados de aceptación: F<br align="left"/>
-Estado inicial: I<br align="left"/>
->];
 }

@@ -80,7 +80,7 @@ class Controller:
         self._view = View(app)
         app.switch_frame(self._view)
 
-        self._view.set_controller(self)
+        self._view.controller = self
 
     def return_button(self):
         controller = InitialWindow.MenuController(self._app)
